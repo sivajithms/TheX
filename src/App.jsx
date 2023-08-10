@@ -1,22 +1,32 @@
 import React, { useState } from "react";
 import "./App.css";
-const words = [
-  "apple",
-  "banana",
-  "orange",
-  "grape",
-  "pineapple",
-  "strawberry",
-  "blueberry",
-  "watermelon",
-  "kiwi",
-  "mango"
-];
+
 function App() {
   const [text, setText] = useState("");
+  const [repeatedWords, setRepeatedWords] = useState([]);
+  const [wordCount, setWordCount] = useState({});
+
+  const handleSubmission = () => {
+    const words = text.split(/\s+/); 
+    const newWordCount = {};
+
+    words.forEach((word) => {
+      word = word.toLowerCase();
+      if (newWordCount[word]) {
+        newWordCount[word]++;
+      } else {
+        newWordCount[word] = 1;
+      }
+    });
+
+    const sortedWords = Object.keys(newWordCount).sort((a, b) => newWordCount[b] - newWordCount[a]);
+
+    setRepeatedWords(sortedWords);
+    setWordCount(newWordCount); 
+  };
 
   return (
-    <div className="container p-16">
+    <div className="container p-4 md:p-16 lg:px-32">
       <label className="block mb-2 text-sm font-medium text-gray-600">
         Enter Text
       </label>
@@ -27,17 +37,24 @@ function App() {
         onChange={(e) => setText(e.target.value)}
       ></textarea>
       <div className="flex justify-end mt-4">
-        <button className="bg-green-700 text-white px-8 py-2 rounded-sm">
+        <button
+          className="bg-green-700 text-white px-8 py-2 rounded-sm"
+          onClick={handleSubmission}
+        >
           Submit
         </button>
       </div>
-      <h1 className="pt-8 font-bold	text-xl	">Result</h1>
-      <div className="flex flex-wrap	 h-44 flex-col">
-        {words?.map((word)=>{
-          return (
-            <div className="p-8">{word}</div>
-          )
-        })}
+      <h1 className="pt-8 font-bold text-xl">Result</h1>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4">
+        {repeatedWords.map((word, index) => (
+          <div key={index} className="p-2 rounded-lg ">
+            {word && (
+              <>
+                {word} ({wordCount[word] || 0})
+              </>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
