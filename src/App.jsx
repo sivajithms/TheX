@@ -48,11 +48,9 @@ function App() {
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4">
         {repeatedWords.map((word, index) => (
           <div key={index} className="p-2 rounded-lg ">
-            {word && (
               <>
                 {word} ({wordCount[word] || 0})
               </>
-            )}
           </div>
         ))}
       </div>
